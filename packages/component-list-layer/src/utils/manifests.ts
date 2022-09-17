@@ -16,6 +16,7 @@ import ToggleManifests from "@atrilabs/react-component-manifests/src/manifests/T
 import UploadManifests from "@atrilabs/react-component-manifests/src/manifests/Upload/Upload";
 import Link from "@atrilabs/react-component-manifests/src/manifests/Link/Link";
 import MenuManifests from "@atrilabs/react-component-manifests/src/manifests/Menu/Menu";
+import VerticalMenuManifests from "@atrilabs/react-component-manifests/src/manifests/VerticalMenu/VerticalMenu";
 import LineChartManifests from "@atrilabs/react-component-manifests/src/manifests/charts/LineChart/LineChart";
 import BarChartManifests from "@atrilabs/react-component-manifests/src/manifests/charts/BarChart/BarChart";
 import AreaChartManifests from "@atrilabs/react-component-manifests/src/manifests/charts/AreaChart/AreaChart";
@@ -90,6 +91,7 @@ const defaultImports = [
   UploadManifests,
   Link,
   MenuManifests,
+  VerticalMenuManifests,
   LineChartManifests,
   BarChartManifests,
   AreaChartManifests,
