@@ -35,7 +35,10 @@ export const PieChart = forwardRef<
       toolTip?: { show?: boolean };
       legend?: { show?: boolean };
       keys?: { value?: string };
+      chartWidth: number;
+      chartHeight: number;
     };
+    className?: string;
   }
 >((props, ref) => {
   const valueKey = useMemo(() => {
@@ -57,18 +60,14 @@ export const PieChart = forwardRef<
   }, [props.custom]);
 
   return (
-    <div ref={ref} style={{ display: "inline-block", ...props.styles }}>
+    <div
+      ref={ref}
+      style={{ display: "inline-block", ...props.styles }}
+      className={props.className}
+    >
       <PieChartRechart
-        width={
-          typeof props.styles.width === "string"
-            ? parseInt(props.styles.width)
-            : props.styles.width
-        }
-        height={
-          typeof props.styles.height === "string"
-            ? parseInt(props.styles.height)
-            : props.styles.height
-        }
+        width={props.custom.chartWidth}
+        height={props.custom.chartHeight}
         data={props.custom.data}
       >
         {props.custom.toolTip?.show ? <Tooltip /> : null}
@@ -149,11 +148,13 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    data: "array",
-    options: "array",
-    toolTip: "map",
-    legend: "map",
-    keys: "map",
+    data: { type: "array" },
+    options: { type: "array" },
+    toolTip: { type: "map" },
+    legend: { type: "map" },
+    keys: { type: "map" },
+    chartHeight: { type: "number" },
+    chartWidth: { type: "number" },
   },
 };
 
@@ -168,7 +169,7 @@ const compManifest: ReactComponentManifestSchema = {
     attachProps: {
       styles: {
         treeId: CSSTreeId,
-        initialValue: { width: "400px", height: "400px" },
+        initialValue: {},
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
       },
@@ -178,6 +179,8 @@ const compManifest: ReactComponentManifestSchema = {
           data: [],
           toolTip: { show: true },
           legend: { show: true },
+          chartHeight: 400,
+          chartWidth: 400,
         },
         treeOptions: customTreeOptions,
         canvasOptions: { groupByBreakpoint: false },

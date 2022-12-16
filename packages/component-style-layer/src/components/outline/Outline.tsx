@@ -46,6 +46,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   drop: {
     display: "flex",
     alignItems: "baseline",
+    cursor: "pointer",
   },
   optionName: {
     ...smallText,
@@ -187,9 +188,6 @@ export const Outline: React.FC<CssProprtyComponentType> = (props) => {
           </div>
         </div>
         <div style={styles.gridInputContainer}>
-          <div style={styles.optionName}>
-            <BC />
-          </div>
           <ColorComponent
             name="Outline Color"
             styleItem="outlineColor"

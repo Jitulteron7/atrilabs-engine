@@ -42,7 +42,10 @@ export const LineChart = forwardRef<
       legend?: { show?: boolean };
       xAxis?: { show?: boolean; key?: string };
       yAxis?: { show?: boolean };
+      chartWidth: number;
+      chartHeight: number;
     };
+    className?: string;
   }
 >((props, ref) => {
   const xAxisKey = useMemo(() => {
@@ -81,18 +84,14 @@ export const LineChart = forwardRef<
   }, [areOrderProvided, props.custom, xAxisKey]);
 
   return (
-    <div ref={ref} style={{ display: "inline-block", ...props.styles }}>
+    <div
+      ref={ref}
+      style={{ display: "inline-block", ...props.styles }}
+      className={props.className}
+    >
       <LineChartRechart
-        width={
-          typeof props.styles.width === "string"
-            ? parseInt(props.styles.width)
-            : props.styles.width
-        }
-        height={
-          typeof props.styles.height === "string"
-            ? parseInt(props.styles.height)
-            : props.styles.height
-        }
+        width={props.custom.chartWidth}
+        height={props.custom.chartHeight}
         data={props.custom.data}
       >
         {props.custom.cartesianGrid?.show ? (
@@ -198,13 +197,15 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    cartesianGrid: "map",
-    data: "array",
-    options: "map",
-    toolTip: "map",
-    legend: "map",
-    xAxis: "map",
-    yAxis: "map",
+    cartesianGrid: { type: "map" },
+    data: { type: "array" },
+    options: { type: "map" },
+    toolTip: { type: "map" },
+    legend: { type: "map" },
+    xAxis: { type: "map" },
+    yAxis: { type: "map" },
+    chartHeight: { type: "number" },
+    chartWidth: { type: "number" },
   },
 };
 
@@ -219,7 +220,7 @@ const compManifest: ReactComponentManifestSchema = {
     attachProps: {
       styles: {
         treeId: CSSTreeId,
-        initialValue: { width: "400px", height: "400px" },
+        initialValue: {},
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
       },
@@ -227,10 +228,13 @@ const compManifest: ReactComponentManifestSchema = {
         treeId: CustomTreeId,
         initialValue: {
           data: [],
+          cartesianGrid: { show: true, strokeDasharray: "3" },
           xAxis: { show: true, key: "x" },
           yAxis: { show: true },
           toolTip: { show: true },
           legend: { show: true },
+          chartHeight: 400,
+          chartWidth: 400,
         },
         treeOptions: customTreeOptions,
         canvasOptions: { groupByBreakpoint: false },

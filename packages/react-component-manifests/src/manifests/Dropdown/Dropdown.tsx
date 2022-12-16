@@ -10,7 +10,7 @@ import CustomTreeId from "@atrilabs/app-design-forest/lib/customPropsTree?id";
 import { ReactComponent as Icon } from "./icon.svg";
 
 export const Dropdown = forwardRef<
-  HTMLDivElement,
+  HTMLSelectElement,
   {
     styles: React.CSSProperties;
     custom: {
@@ -20,6 +20,7 @@ export const Dropdown = forwardRef<
       disabled?: boolean;
     };
     onChange: (selectedValue: string) => void;
+    className?: string;
   }
 >((props, ref) => {
   const onChange = useCallback(
@@ -29,26 +30,26 @@ export const Dropdown = forwardRef<
     [props]
   );
   return (
-    <div ref={ref} style={{ display: "inline-block" }}>
-      <select
-        value={props.custom.selectedValue}
-        onChange={onChange}
-        disabled={props.custom.disabled}
-        style={props.styles}
-      >
-        {props.custom.values.map((value, index) => {
-          const displayedValue =
-            props.custom.displayedValues?.[index] !== undefined
-              ? props.custom.displayedValues?.[index]
-              : value;
-          return (
-            <option value={value} key={value} style={props.styles}>
-              {displayedValue}
-            </option>
-          );
-        })}
-      </select>
-    </div>
+    <select
+      value={props.custom.selectedValue}
+      onChange={onChange}
+      disabled={props.custom.disabled}
+      className={props.className}
+      style={props.styles}
+      ref={ref}
+    >
+      {props.custom.values.map((value, index) => {
+        const displayedValue =
+          props.custom.displayedValues?.[index] !== undefined
+            ? props.custom.displayedValues?.[index]
+            : value;
+        return (
+          <option value={value} key={value}>
+            {displayedValue}
+          </option>
+        );
+      })}
+    </select>
   );
 });
 
@@ -71,9 +72,9 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    values: "array",
-    selectedValue: "text",
-    displayedValues: "array",
+    values: { type: "array" },
+    selectedValue: { type: "text" },
+    displayedValues: { type: "array" },
   },
 };
 

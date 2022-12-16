@@ -46,7 +46,10 @@ export const BarChart = forwardRef<
       yAxis?: { show?: boolean };
       // Bar Chart specific options
       stacked?: boolean;
+      chartWidth: number;
+      chartHeight: number;
     };
+    className?: string;
   }
 >((props, ref) => {
   const xAxisKey = useMemo(() => {
@@ -66,7 +69,6 @@ export const BarChart = forwardRef<
     }
     return true;
   }, [props.custom, xAxisKey]);
-
   const sortedKeys = useMemo(() => {
     if (props.custom.data.length > 0) {
       return Object.keys(props.custom.data[0])
@@ -85,19 +87,14 @@ export const BarChart = forwardRef<
   }, [areOrderProvided, props.custom, xAxisKey]);
 
   return (
-    <div ref={ref} style={{ display: "inline-block", ...props.styles }}>
+    <div
+      ref={ref}
+      style={{ display: "inline-block", ...props.styles }}
+      className={props.className}
+    >
       <BarChartRechart
-        width={
-          typeof props.styles.width === "string"
-            ? parseInt(props.styles.width)
-            : props.styles.width
-        }
-        height={
-          typeof props.styles.height === "string"
-            ? parseInt(props.styles.height)
-            : props.styles.height
-        }
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        width={props.custom.chartWidth}
+        height={props.custom.chartHeight}
         data={props.custom.data}
       >
         {props.custom.cartesianGrid?.show ? (
@@ -106,7 +103,7 @@ export const BarChart = forwardRef<
           />
         ) : null}
         {props.custom.xAxis?.show ? <XAxis dataKey={xAxisKey} /> : null}
-        {props.custom.yAxis?.show ? <YAxis /> : null}
+        {props.custom.yAxis?.show ? <YAxis width={40} /> : null}
         {props.custom.toolTip?.show ? <Tooltip /> : null}
         {props.custom.legend?.show ? <Legend /> : null}
         {sortedKeys.map((key, index) => {
@@ -193,7 +190,7 @@ const cssTreeOptions: CSSTreeOptions = {
   flexContainerOptions: false,
   flexChildOptions: false,
   positionOptions: false,
-  typographyOptions: false,
+  typographyOptions: true,
   spacingOptions: false,
   sizeOptions: true,
   borderOptions: false,
@@ -204,14 +201,16 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    cartesianGrid: "map",
-    data: "array",
-    options: "map",
-    toolTip: "map",
-    legend: "map",
-    xAxis: "map",
-    yAxis: "map",
-    stacked: "boolean",
+    cartesianGrid: { type: "map" },
+    data: { type: "array" },
+    options: { type: "map" },
+    toolTip: { type: "map" },
+    legend: { type: "map" },
+    xAxis: { type: "map" },
+    yAxis: { type: "map" },
+    stacked: { type: "boolean" },
+    chartHeight: { type: "number" },
+    chartWidth: { type: "number" },
   },
 };
 
@@ -226,7 +225,7 @@ const compManifest: ReactComponentManifestSchema = {
     attachProps: {
       styles: {
         treeId: CSSTreeId,
-        initialValue: { width: "400px", height: "400px" },
+        initialValue: {},
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
       },
@@ -234,10 +233,13 @@ const compManifest: ReactComponentManifestSchema = {
         treeId: CustomTreeId,
         initialValue: {
           data: [],
+          cartesianGrid: { show: true, strokeDasharray: "3" },
           xAxis: { show: true, key: "x" },
           yAxis: { show: true },
           toolTip: { show: true },
           legend: { show: true },
+          chartHeight: 400,
+          chartWidth: 400,
         },
         treeOptions: customTreeOptions,
         canvasOptions: { groupByBreakpoint: false },

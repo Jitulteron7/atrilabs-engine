@@ -1,5 +1,5 @@
 import { gray100, gray800, smallText } from "@atrilabs/design-system";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect, useState } from "react";
 import { CssProprtyComponentType } from "../../types";
 import ControlledInput from "./ControlledInput";
 import "./SizeInputWithUnits.css";
@@ -31,6 +31,8 @@ const styles: { [key: string]: React.CSSProperties } = {
 export const SizeInputWithUnits: React.FC<SizeInputWithUnitsProps> = (
   props
 ) => {
+  const [unitValue, setUnitValue] = useState("px");
+
   const getDigitIndex = (value: string) => {
     let digitIndex;
     value = String(value);
@@ -56,8 +58,16 @@ export const SizeInputWithUnits: React.FC<SizeInputWithUnitsProps> = (
   const unit = useMemo(() => {
     return getUnitIndex(String(props.styles[props.styleItem])) === "auto"
       ? ""
-      : getUnitIndex(String(props.styles[props.styleItem] || "px"));
-  }, [props.styles, props.styleItem, getUnitIndex]);
+      : getUnitIndex(String(props.styles[props.styleItem] || unitValue));
+  }, [props.styles, props.styleItem, getUnitIndex, unitValue]);
+
+  const displayUnit = useMemo(() => {
+    return props.styles[props.styleItem] === ""
+      ? unitValue
+      : unit
+      ? unit
+      : null;
+  }, [props, unitValue, unit]);
 
   const parseValueUnit = (e: string, unit: string) => {
     return e ? e.concat(unit) : "";
@@ -67,20 +77,31 @@ export const SizeInputWithUnits: React.FC<SizeInputWithUnitsProps> = (
     e: React.ChangeEvent<HTMLInputElement>,
     styleItem: keyof React.CSSProperties
   ) => {
-    props.patchCb({
-      property: {
-        styles: {
-          [styleItem]:
-            unit === "auto" ? "auto" : parseValueUnit(e.target.value, unit),
+    if (!e.target.value) {
+      props.patchCb({
+        property: {
+          styles: {
+            [styleItem]: "",
+          },
         },
-      },
-    });
+      });
+    } else {
+      props.patchCb({
+        property: {
+          styles: {
+            [styleItem]:
+              unit === "auto" ? "auto" : parseValueUnit(e.target.value, unit),
+          },
+        },
+      });
+    }
   };
 
   const handleUnitChange = (
     unitValue: string,
     styleItem: keyof React.CSSProperties
   ) => {
+    setUnitValue(unitValue);
     if (unitValue === "auto") {
       props.patchCb({
         property: {
@@ -103,19 +124,6 @@ export const SizeInputWithUnits: React.FC<SizeInputWithUnitsProps> = (
 
   return (
     <div style={styles.container}>
-      {/* <input
-        type="text"
-        value={
-          props.styles[props.styleItem] !== "auto"
-            ? getNumericValue(String(props.styles[props.styleItem]))
-            : props.styles[props.styleItem]
-        }
-        onChange={(e) => handleChange(e, props.styleItem)}
-        style={styles.inputBox}
-        placeholder={props.defaultValue}
-        disabled={unit === "auto" ? true : false}
-        pattern="^[0-9]+$"
-      /> */}
       <ControlledInput
         type="text"
         value={
@@ -125,13 +133,13 @@ export const SizeInputWithUnits: React.FC<SizeInputWithUnitsProps> = (
         }
         onChange={handleChange}
         styleItem={props.styleItem}
-        disabled={unit}
+        disabled={unitValue}
         placeholder={props.defaultValue}
         pattern="^[0-9]+$"
       />
 
       <div className="dropdown" style={{ position: "relative" }}>
-        <button className="dropbtn">{unit ? unit : null}</button>
+        <button className="dropbtn">{displayUnit}</button>
         <div
           className="dropdown-content"
           style={{ position: "absolute", left: "0" }}

@@ -29,6 +29,7 @@ export const Menu = forwardRef<
       alignRight?: boolean;
     };
     onClick: (open: boolean) => void;
+    className?: string;
   }
 >((props, ref) => {
   const onClick = useCallback(() => {
@@ -36,7 +37,11 @@ export const Menu = forwardRef<
   }, [props]);
   const gap = typeof props.custom.gap === "number" ? props.custom.gap : 0;
   return (
-    <div ref={ref} style={{ ...props.styles, position: "relative" }}>
+    <div
+      ref={ref}
+      style={{ ...props.styles, position: "relative" }}
+      className={props.className}
+    >
       <div
         style={{
           height: `${props.custom.iconHeight}px`,
@@ -94,13 +99,13 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    open: "boolean",
-    src: "static_asset",
-    iconHeight: "number",
-    iconWidth: "number",
-    strokeColor: "color",
-    gap: "number",
-    alignRight: "boolean",
+    open: { type: "boolean" },
+    src: { type: "static_asset" },
+    iconHeight: { type: "number" },
+    iconWidth: { type: "number" },
+    strokeColor: { type: "color" },
+    gap: { type: "number" },
+    alignRight: { type: "boolean" },
   },
 };
 

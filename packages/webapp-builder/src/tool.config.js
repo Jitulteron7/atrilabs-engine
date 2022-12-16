@@ -31,6 +31,7 @@ const EVENT_SERVER_PORT = process.env["EVENT_SERVER_PORT"]
 const FILE_SERVER_PORT = process.env["FILE_SERVER_PORT"]
   ? parseInt(process.env["FILE_SERVER_PORT"])
   : 4002;
+const FILE_SERVER_CLIENT = `http://localhost:${FILE_SERVER_PORT}`;
 const EVENT_SERVER_CLIENT = `http://localhost:${EVENT_SERVER_PORT}`;
 const MANIFEST_SERVER_PORT = process.env["MANIFEST_SERVER_PORT"]
   ? parseInt(process.env["MANIFEST_SERVER_PORT"])
@@ -43,6 +44,13 @@ const PUBLISH_SERVER_CLIENT = `http://localhost:${PUBLISH_SERVER_PORT}`;
 const IPC_SERVER_PORT = process.env["IPC_SERVER_PORT"]
   ? parseInt(process.env["IPC_SERVER_PORT"])
   : 4006;
+const IPC_SERVER_CLIENT = `http://localhost:${IPC_SERVER_PORT}`;
+
+// mode can be component_development, development, production
+const MODE = process.env["MODE"];
+// INSIDE_EDITOR is use by components like Modal to have slightly
+// different behavior inside & outside editor
+const INSIDE_EDITOR = "true";
 
 module.exports = {
   pkgManager: "yarn",
@@ -73,6 +81,9 @@ module.exports = {
     { pkg: "@atrilabs/app-template-layer" },
     { pkg: "@atrilabs/action-layer" },
     { pkg: "@atrilabs/resource-processor-layer" },
+    { pkg: "@atrilabs/undo-redo-layer" },
+    { pkg: "@atrilabs/component-navigator" },
+    { pkg: "@atrilabs/services-status-layer" },
   ],
   output: "lib",
   services: {
@@ -173,6 +184,9 @@ module.exports = {
     EVENT_SERVER_CLIENT,
     MANIFEST_SERVER_CLIENT,
     PUBLISH_SERVER_CLIENT,
+    IPC_SERVER_CLIENT,
+    MODE,
+    INSIDE_EDITOR,
   },
   runtimes: [{ pkg: "@atrilabs/canvas-runtime" }],
   manifestClient: {
@@ -184,8 +198,10 @@ module.exports = {
     { pkg: "@atrilabs/react-component-manifest-schema" },
   ],
   manifestDirs: [{ pkg: "@atrilabs/react-component-manifests" }],
+  devServerProxy: {
+    hostname: FILE_SERVER_CLIENT,
+  },
   assetManager: {
-    hostname: EVENT_SERVER_CLIENT,
     urlPath: "/app-assets",
     assetsDir: `${compileAppOutputDir}/assets`,
   },

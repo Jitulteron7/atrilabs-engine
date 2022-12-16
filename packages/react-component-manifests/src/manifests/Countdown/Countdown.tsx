@@ -7,7 +7,6 @@ import CSSTreeId from "@atrilabs/app-design-forest/lib/cssTree?id";
 import { CSSTreeOptions } from "@atrilabs/app-design-forest/lib/cssTree";
 import { CustomPropsTreeOptions } from "@atrilabs/app-design-forest/lib/customPropsTree";
 import CustomTreeId from "@atrilabs/app-design-forest/lib/customPropsTree?id";
-import "./Countdown.css";
 import { useCountdown } from "./useCountdown";
 import { ReactComponent as Icon } from "./icon.svg";
 
@@ -29,7 +28,6 @@ export const DateTimeDisplay: React.FC<DateTimeDisplayComponentTypes> = ({
 };
 
 export const ExpiredNotice = () => {
-  //CARE
   return (
     <div className="expired-notice">
       <span>Countdown has expired!</span>
@@ -46,6 +44,7 @@ export type ShowCounterComponentTypes = {
   showHours: boolean;
   showMinutes: boolean;
   showSeconds: boolean;
+  className?: string;
 };
 
 export const ShowCounter: React.FC<ShowCounterComponentTypes> = ({
@@ -57,61 +56,129 @@ export const ShowCounter: React.FC<ShowCounterComponentTypes> = ({
   showHours,
   showMinutes,
   showSeconds,
+  className,
 }) => {
   return (
-    <div className="show-counter" style={{ display: "inline-flex" }}>
-      {showDays && (
-        <div style={{ display: "flex" }}>
-          <DateTimeDisplay value={days} type={"Days"} />
-        </div>
-      )}
-      <div
-        style={
-          showDays === false ||
-          (showHours === false &&
-            showMinutes === false &&
-            showSeconds === false)
-            ? { display: "none" }
-            : { display: "flex" }
+    <>
+      <style>
+        {`
+        .expired-notice {
+          text-align: center;
+          padding: 2rem;
+          border: 1px solid #ebebeb;
+          border-radius: 0.25rem;
+          margin: 0.5rem;
         }
-      >
-        <p>:</p>
-      </div>
-      {showHours && (
-        <div style={{ display: "flex" }}>
-          <DateTimeDisplay value={hours} type={"Hours"} />
-        </div>
-      )}
-      <div
-        style={
-          showHours === false ||
-          (showMinutes === false && showSeconds === false)
-            ? { display: "none" }
-            : { display: "flex" }
+        
+        .expired-notice > span {
+          font-size: 2.5rem;
+          font-weight: bold;
+          color: red;
         }
-      >
-        <p>:</p>
-      </div>
-      {showMinutes && (
-        <div style={{ display: "flex" }}>
-          <DateTimeDisplay value={minutes} type={"Mins"} />
-        </div>
-      )}
-      <div
-        style={
-          showMinutes === false || showSeconds === false
-            ? { display: "none" }
-            : { display: "flex" }
+        
+        .expired-notice > p {
+          font-size: 1.5rem;
         }
+        
+        .show-counter {
+          padding: 0.5rem;
+          display: flex;
+        }
+        
+        .show-counter .countdown-link {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          font-weight: 700;
+          font-size: 1.25rem;
+          line-height: 1.75rem;
+          padding: 0.5rem;
+          border: 1px solid #ebebeb;
+          border-radius: 0.25rem;
+          text-decoration: none;
+          color: #000;
+        }
+        
+        .show-counter .countdown {
+          line-height: 1.25rem;
+          padding: 0 0.75rem 0 0.75rem;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .show-counter .countdown.danger {
+          color: #ff0000;
+        }
+        
+        .show-counter .countdown > p {
+          margin: 0;
+        }
+        
+        .show-counter .countdown > span {
+          text-transform: uppercase;
+          font-size: 0.75rem;
+          line-height: 1rem;
+        }`}
+      </style>
+      <div
+        className={`show-counter ${className ? className : ""}`}
+        style={{ display: "inline-flex" }}
       >
-        <p>:</p>
-      </div>
-      {showSeconds && (
-        <div style={{ display: "flex" }}>
-          <DateTimeDisplay value={seconds} type={"Seconds"} />
+        {showDays && (
+          <div style={{ display: "flex" }}>
+            <DateTimeDisplay value={days} type={"Days"} />
+          </div>
+        )}
+        <div
+          style={
+            showDays === false ||
+            (showHours === false &&
+              showMinutes === false &&
+              showSeconds === false)
+              ? { display: "none" }
+              : { display: "flex" }
+          }
+        >
+          <p>:</p>
         </div>
-      )}
-    </div>
+        {showHours && (
+          <div style={{ display: "flex" }}>
+            <DateTimeDisplay value={hours} type={"Hours"} />
+          </div>
+        )}
+        <div
+          style={
+            showHours === false ||
+            (showMinutes === false && showSeconds === false)
+              ? { display: "none" }
+              : { display: "flex" }
+          }
+        >
+          <p>:</p>
+        </div>
+        {showMinutes && (
+          <div style={{ display: "flex" }}>
+            <DateTimeDisplay value={minutes} type={"Mins"} />
+          </div>
+        )}
+        <div
+          style={
+            showMinutes === false || showSeconds === false
+              ? { display: "none" }
+              : { display: "flex" }
+          }
+        >
+          <p>:</p>
+        </div>
+        {showSeconds && (
+          <div style={{ display: "flex" }}>
+            <DateTimeDisplay value={seconds} type={"Seconds"} />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 export type CountdownTimerComponentTypes = {
@@ -121,6 +188,7 @@ export type CountdownTimerComponentTypes = {
   showHours: boolean;
   showMinutes: boolean;
   showSeconds: boolean;
+  className?: string;
 };
 
 export const CountdownTimer: React.FC<CountdownTimerComponentTypes> = ({
@@ -130,6 +198,7 @@ export const CountdownTimer: React.FC<CountdownTimerComponentTypes> = ({
   showHours,
   showMinutes,
   showSeconds,
+  className,
 }) => {
   const [days, hours, minutes, seconds] = useCountdown(targetDate, isFrozen);
 
@@ -138,6 +207,7 @@ export const CountdownTimer: React.FC<CountdownTimerComponentTypes> = ({
   } else {
     return (
       <ShowCounter
+        className={className}
         days={days}
         hours={hours}
         minutes={minutes}
@@ -161,6 +231,7 @@ export type CountdownAssetComponentTypes = {
   showHours: boolean;
   showMinutes: boolean;
   showSeconds: boolean;
+  className?: string;
 };
 
 export const CountdownAsset: React.FC<CountdownAssetComponentTypes> = ({
@@ -173,6 +244,7 @@ export const CountdownAsset: React.FC<CountdownAssetComponentTypes> = ({
   showHours,
   showMinutes,
   showSeconds,
+  className,
 }) => {
   const days = noOfDays * 24 * 60 * 60 * 1000;
   const hours = noOfHours * 60 * 60 * 1000;
@@ -183,6 +255,7 @@ export const CountdownAsset: React.FC<CountdownAssetComponentTypes> = ({
 
   return (
     <CountdownTimer
+      className={className}
       isFrozen={isFrozen}
       targetDate={dateTimeAfterGivenTime}
       showDays={showDays}
@@ -193,60 +266,49 @@ export const CountdownAsset: React.FC<CountdownAssetComponentTypes> = ({
   );
 };
 
-export const Countdown = forwardRef<
-  HTMLDivElement,
-  {
-    styles: React.CSSProperties;
-    custom: {
-      days: number;
-      hours: number;
-      minutes: number;
-      seconds: number;
-      frozen: boolean;
-      showDays: boolean;
-      showHours: boolean;
-      showMinutes: boolean;
-      showSeconds: boolean;
-    };
-  }
->((props, ref) => {
-  return (
-    <div ref={ref} style={{ display: "inline-flex", ...props.styles }}>
-      <CountdownAsset
-        isFrozen={props.custom.frozen}
-        noOfDays={props.custom.days}
-        noOfHours={props.custom.hours}
-        noOfMinutes={props.custom.minutes}
-        noOfSeconds={props.custom.seconds}
-        showDays={props.custom.showDays}
-        showHours={props.custom.showHours}
-        showMinutes={props.custom.showMinutes}
-        showSeconds={props.custom.showSeconds}
-      />
-    </div>
-  );
-});
+export type CountdownProps = {
+  styles: React.CSSProperties;
+  custom: {
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    frozen: boolean;
+    showDays: boolean;
+    showHours: boolean;
+    showMinutes: boolean;
+    showSeconds: boolean;
+  };
+  className?: string;
+};
 
-export const DevCountdown = forwardRef<
-  HTMLDivElement,
-  {
-    styles: React.CSSProperties;
-    custom: {
-      days: number;
-      hours: number;
-      minutes: number;
-      seconds: number;
-      frozen: boolean;
-      showDays: boolean;
-      showHours: boolean;
-      showMinutes: boolean;
-      showSeconds: boolean;
-    };
+export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
+  (props, ref) => {
+    return (
+      <div ref={ref} style={{ display: "inline-flex", ...props.styles }}>
+        <CountdownAsset
+          isFrozen={props.custom.frozen}
+          noOfDays={props.custom.days}
+          noOfHours={props.custom.hours}
+          noOfMinutes={props.custom.minutes}
+          noOfSeconds={props.custom.seconds}
+          showDays={props.custom.showDays}
+          showHours={props.custom.showHours}
+          showMinutes={props.custom.showMinutes}
+          showSeconds={props.custom.showSeconds}
+          className={props.className}
+        />
+      </div>
+    );
   }
->((props, ref) => {
-  props.custom.frozen = true;
-  return <Countdown ref={ref} {...props} />;
-});
+);
+
+export const DevCountdown = forwardRef<HTMLDivElement, CountdownProps>(
+  (props, ref) => {
+    props.custom.frozen = true;
+    return <Countdown ref={ref} {...props} />;
+  }
+);
 
 const cssTreeOptions: CSSTreeOptions = {
   flexContainerOptions: false,
@@ -263,15 +325,15 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    days: "number",
-    hours: "number",
-    minutes: "number",
-    seconds: "number",
-    frozen: "boolean",
-    showDays: "boolean",
-    showHours: "boolean",
-    showMinutes: "boolean",
-    showSeconds: "boolean",
+    days: { type: "number" },
+    hours: { type: "number" },
+    minutes: { type: "number" },
+    seconds: { type: "number" },
+    frozen: { type: "boolean" },
+    showDays: { type: "boolean" },
+    showHours: { type: "boolean" },
+    showMinutes: { type: "boolean" },
+    showSeconds: { type: "boolean" },
   },
 };
 

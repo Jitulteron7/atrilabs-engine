@@ -22,6 +22,7 @@ export const Image = forwardRef<
       width: number;
       height: number;
     }) => void;
+    className?: string;
   }
 >((props, ref) => {
   const onClick = useCallback(
@@ -43,6 +44,7 @@ export const Image = forwardRef<
 
   return (
     <img
+      className={props.className}
       ref={ref}
       style={props.styles}
       onClick={onClick}
@@ -67,8 +69,8 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    alt: "text",
-    src: "static_asset",
+    alt: { type: "text" },
+    src: { type: "static_asset" },
   },
 };
 

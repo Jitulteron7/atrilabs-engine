@@ -10,7 +10,7 @@ import CSSTreeId from "@atrilabs/app-design-forest/lib/cssTree?id";
 import { CSSTreeOptions } from "@atrilabs/app-design-forest/lib/cssTree";
 import { CustomPropsTreeOptions } from "@atrilabs/app-design-forest/lib/customPropsTree";
 import CustomTreeId from "@atrilabs/app-design-forest/lib/customPropsTree?id";
-import { ReactComponent as Icon } from "./icon.svg";
+import { ReactComponent as Icon } from "./upload.svg";
 
 const fileIoProp: IoProp = {
   type: "files",
@@ -29,6 +29,7 @@ export const Upload = forwardRef<
     };
     onChange: (files: FileList) => void;
     io: { files: FileList };
+    className?: string;
   }
 >((props, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,6 +53,7 @@ export const Upload = forwardRef<
         display: "inline-flex",
       }}
       onClick={onClickCb}
+      className={props.className}
     >
       <div>{props.custom.text}</div>
       {props.custom.showFilename ? (
@@ -92,10 +94,10 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    multuple: "boolean",
-    showFilename: "boolean",
-    text: "text",
-    disabled: "boolean",
+    multuple: { type: "boolean" },
+    showFilename: { type: "boolean" },
+    text: { type: "text" },
+    disabled: { type: "boolean" },
   },
 };
 

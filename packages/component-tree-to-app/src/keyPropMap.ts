@@ -337,4 +337,27 @@ export const keyPropMap: any = {
       selection: [],
     },
   },
+  Modal: {
+    styles: { ...FlexStyle },
+    custom: {
+      modalSize: "",
+      okButtonColor: "",
+      okButtonBgColor: "",
+      okButtonBorderColor: "",
+      cancelButtonColor: "",
+      cancelButtonBgColor: "",
+      cancelButtonBorderColor: "",
+      closeModalAfter: 3000,
+      open: false,
+      body: "",
+      title: "",
+    },
+  },
+  Overlay: {
+    styles: { ...FlexStyle },
+    custom: {
+      closeModalAfter: 0,
+      open: false,
+    },
+  },
 };

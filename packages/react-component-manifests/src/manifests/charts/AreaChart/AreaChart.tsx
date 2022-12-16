@@ -42,7 +42,10 @@ export const AreaChart = forwardRef<
       legend?: { show?: boolean };
       xAxis?: { show?: boolean; key?: string };
       yAxis?: { show?: boolean };
+      chartWidth: number;
+      chartHeight: number;
     };
+    className?: string;
   }
 >((props, ref) => {
   const xAxisKey = useMemo(() => {
@@ -81,18 +84,14 @@ export const AreaChart = forwardRef<
   }, [areOrderProvided, props.custom, xAxisKey]);
 
   return (
-    <div ref={ref} style={{ display: "inline-block", ...props.styles }}>
+    <div
+      ref={ref}
+      style={{ display: "inline-block", ...props.styles }}
+      className={props.className}
+    >
       <AreaChartRechart
-        width={
-          typeof props.styles.width === "string"
-            ? parseInt(props.styles.width)
-            : props.styles.width
-        }
-        height={
-          typeof props.styles.height === "string"
-            ? parseInt(props.styles.height)
-            : props.styles.height
-        }
+        width={props.custom.chartWidth}
+        height={props.custom.chartHeight}
         data={props.custom.data}
       >
         {props.custom.cartesianGrid?.show ? (
@@ -199,13 +198,42 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    cartesianGrid: "map",
-    data: "array",
-    options: "map",
-    toolTip: "map",
-    legend: "map",
-    xAxis: "map",
-    yAxis: "map",
+    cartesianGrid: {
+      type: "map",
+      attributes: [{ fieldName: "show", type: "boolean" }],
+    },
+    data: { type: "array" },
+    options: {
+      type: "variable_key_map",
+      attributes: [
+        { fieldName: "stroke", type: "text" },
+        { fieldName: "fill", type: "text" },
+        { fieldName: "type", type: "text" },
+        { fieldName: "animate", type: "boolean" },
+        { fieldName: "order", type: "number" },
+      ],
+    },
+    toolTip: {
+      type: "map",
+      attributes: [{ fieldName: "show", type: "boolean" }],
+    },
+    legend: {
+      type: "map",
+      attributes: [{ fieldName: "show", type: "boolean" }],
+    },
+    xAxis: {
+      type: "map",
+      attributes: [
+        { fieldName: "show", type: "boolean" },
+        { fieldName: "key", type: "text" },
+      ],
+    },
+    yAxis: {
+      type: "map",
+      attributes: [{ fieldName: "show", type: "boolean" }],
+    },
+    chartHeight: { type: "number" },
+    chartWidth: { type: "number" },
   },
 };
 
@@ -220,7 +248,7 @@ const compManifest: ReactComponentManifestSchema = {
     attachProps: {
       styles: {
         treeId: CSSTreeId,
-        initialValue: { width: "400px", height: "400px" },
+        initialValue: {},
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
       },
@@ -228,10 +256,13 @@ const compManifest: ReactComponentManifestSchema = {
         treeId: CustomTreeId,
         initialValue: {
           data: [],
+          cartesianGrid: { show: true, strokeDasharray: "3" },
           xAxis: { show: true, key: "x" },
           yAxis: { show: true },
           toolTip: { show: true },
           legend: { show: true },
+          chartHeight: 400,
+          chartWidth: 400,
         },
         treeOptions: customTreeOptions,
         canvasOptions: { groupByBreakpoint: false },

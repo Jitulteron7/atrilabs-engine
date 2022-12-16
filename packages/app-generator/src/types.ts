@@ -78,8 +78,19 @@ export type PropsGeneratorOptions = {
 export type PropsGeneratorOutput = {
   [compId: string]: {
     props: any;
-    ioProps?: any;
+    ioProps?: {
+      [propName: string]: {
+        mode: "upload" | "download" | "duplex";
+        type: "files" | "stream";
+      };
+    };
     breakpointProps?: { [maxWidth: string]: any };
+    cssProps?: {
+      [propName: string]: {
+        props: React.CSSProperties;
+        breakpoints: { [maxWidth: string]: React.CSSProperties };
+      };
+    };
   };
 };
 
@@ -107,6 +118,8 @@ export type PythonStubGeneratorOutput = {
       type: any;
       // initial value
       value: any;
+      // key can be class name
+      key: string;
       // ioProps
       ioProps?: {
         [propName: string]: {

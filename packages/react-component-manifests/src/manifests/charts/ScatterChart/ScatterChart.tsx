@@ -54,7 +54,10 @@ export const ScatterChart = forwardRef<
         unit?: string;
         range?: [number, number];
       };
+      chartWidth: number;
+      chartHeight: number;
     };
+    className?: string;
   }
 >((props, ref) => {
   const xAxisKey = useMemo(() => {
@@ -88,18 +91,14 @@ export const ScatterChart = forwardRef<
   }, [props.custom]);
 
   return (
-    <div ref={ref} style={{ display: "inline-block", ...props.styles }}>
+    <div
+      ref={ref}
+      style={{ display: "inline-block", ...props.styles }}
+      className={props.className}
+    >
       <ScatterChartRechart
-        width={
-          typeof props.styles.width === "string"
-            ? parseInt(props.styles.width)
-            : props.styles.width
-        }
-        height={
-          typeof props.styles.height === "string"
-            ? parseInt(props.styles.height)
-            : props.styles.height
-        }
+        width={props.custom.chartWidth}
+        height={props.custom.chartHeight}
         data={props.custom.data}
       >
         {props.custom.cartesianGrid?.show ? (
@@ -208,13 +207,15 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    cartesianGrid: "map",
-    data: "array",
-    options: "array",
-    toolTip: "map",
-    legend: "map",
-    xAxis: "map",
-    yAxis: "map",
+    cartesianGrid: { type: "map" },
+    data: { type: "array" },
+    options: { type: "array" },
+    toolTip: { type: "map" },
+    legend: { type: "map" },
+    xAxis: { type: "map" },
+    yAxis: { type: "map" },
+    chartHeight: { type: "number" },
+    chartWidth: { type: "number" },
   },
 };
 
@@ -229,7 +230,7 @@ const compManifest: ReactComponentManifestSchema = {
     attachProps: {
       styles: {
         treeId: CSSTreeId,
-        initialValue: { width: "400px", height: "400px" },
+        initialValue: {},
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
       },
@@ -241,6 +242,8 @@ const compManifest: ReactComponentManifestSchema = {
           yAxis: { show: true },
           toolTip: { show: true },
           legend: { show: true },
+          chartHeight: 400,
+          chartWidth: 400,
         },
         treeOptions: customTreeOptions,
         canvasOptions: { groupByBreakpoint: false },

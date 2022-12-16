@@ -65,6 +65,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   drop: {
     display: "flex",
     alignItems: "baseline",
+    cursor: "pointer",
   },
   optionName: {
     ...smallText,
@@ -266,7 +267,6 @@ export const Background: React.FC<CssProprtyComponentType> = (props) => {
         {/**Background Color */}
         {backgroundTypes[selectedTypeIndex].color && (
           <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={styles.optionName}>Color</span>
             <ColorComponent
               name="Background Color"
               styleItem="backgroundColor"

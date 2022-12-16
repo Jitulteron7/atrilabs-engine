@@ -7,6 +7,7 @@ import {
   OpenAssetManagerCallabck,
   UseUploadAssetManagerOptions,
 } from "../types";
+import { createObject } from "@atrilabs/canvas-runtime-utils/src/utils";
 
 export const useUploadAssetManager = ({
   patchCb,
@@ -15,41 +16,34 @@ export const useUploadAssetManager = ({
   const [showAssetPanel, setShowAssetPanel] = useState<boolean>(false);
   const [modes, setModes] = useState<UploadMode[]>([]);
   const [linkAssetToSelector, setLinkAssetToSelector] = useState<
-    string[] | null
+    (string | number)[] | null
   >(null);
   const [appendToArray, setAppendToArray] =
-    useState<Parameters<OpenAssetManagerCallabck>["2"]>();
+    useState<Parameters<OpenAssetManagerCallabck>["3"]>();
+  const [referenceObject, setReferenceObject] = useState<
+    Parameters<OpenAssetManagerCallabck>["2"]
+  >({});
 
   const callPatchCbWithUrl = useCallback(
-    (selector: string[], url: string) => {
-      const obj: any = {};
-      let curr = obj;
-      for (let i = 0; i < selector.length; i++) {
-        const key = selector[i];
-        if (i === selector.length - 1) {
-          const value = wrapInUrl ? `url("${url}")` : url;
-          if (appendToArray) {
-            const copyArray = [...appendToArray.currentArray];
-            if (
-              appendToArray.index >= 0 &&
-              appendToArray.index < copyArray.length
-            ) {
-              copyArray.splice(appendToArray.index, 1, value);
-            } else if (appendToArray.index < 0) {
-              copyArray.push(value);
-            }
-            curr[key] = copyArray;
-          } else {
-            curr[key] = value;
-          }
-        } else {
-          curr[key] = {};
+    (selector: (string | number)[], url: string) => {
+      const value = wrapInUrl ? `url("${url}")` : url;
+      if (appendToArray) {
+        const copyArray = [...appendToArray.currentArray];
+        if (
+          appendToArray.index >= 0 &&
+          appendToArray.index < copyArray.length
+        ) {
+          copyArray.splice(appendToArray.index, 1, value);
+        } else if (appendToArray.index < 0) {
+          copyArray.push(value);
         }
-        curr = curr[key];
+        console.log("useUploadAssetManager callPatchCbWithUrl 2", copyArray);
+        patchCb(createObject(referenceObject, selector, copyArray));
+      } else {
+        patchCb(createObject(referenceObject, selector, value));
       }
-      patchCb(obj);
     },
-    [patchCb, wrapInUrl, appendToArray]
+    [appendToArray, patchCb, referenceObject, wrapInUrl]
   );
 
   const onCrossClicked = useCallback(() => {
@@ -59,7 +53,8 @@ export const useUploadAssetManager = ({
   }, []);
 
   const openAssetManager = useCallback<OpenAssetManagerCallabck>(
-    (modes, selector, appendToArray) => {
+    (modes, selector, props, appendToArray) => {
+      setReferenceObject(props);
       setShowAssetPanel(true);
       setModes(modes);
       setLinkAssetToSelector(selector);

@@ -37,9 +37,17 @@ module.exports = {
       modulePath: "./src/manifests/Carousel/Carousel.tsx",
       exportedVarName: "Carousel",
     },
+    Breadcrumb: {
+      modulePath: "./src/manifests/Breadcrumb/Breadcrumb.tsx",
+      exportedVarName: "Breadcrumb",
+    },
     Countdown: {
       modulePath: "./src/manifests/Countdown/Countdown.tsx",
       exportedVarName: "Countdown",
+    },
+    Countup: {
+      modulePath: "./src/manifests/CountUp/CountUp.tsx",
+      exportedVarName: "Countup",
     },
     Link: {
       modulePath: "./src/manifests/Link/Link.tsx",
@@ -57,6 +65,10 @@ module.exports = {
       modulePath: "./src/manifests/Step/Step.tsx",
       exportedVarName: "Step",
     },
+    Rating: {
+      modulePath: "./src/manifests/Rating/Rating.tsx",
+      exportedVarName: "Rating",
+    },
     TextBox: {
       modulePath: "./src/manifests/TextBox/TextBox.tsx",
       exportedVarName: "TextBox",
@@ -68,6 +80,10 @@ module.exports = {
     Menu: {
       modulePath: "./src/manifests/Menu/Menu.tsx",
       exportedVarName: "Menu",
+    },
+    VerticalMenu: {
+      modulePath: "./src/manifests/VerticalMenu/VerticalMenu.tsx",
+      exportedVarName: "VerticalMenu",
     },
     LineChart: {
       modulePath: "./src/manifests/charts/LineChart/LineChart.tsx",
@@ -97,6 +113,18 @@ module.exports = {
       modulePath: "./src/manifests/charts/CandleStick/CandleStick.tsx",
       exportedVarName: "CandleStick",
     },
+    RadialbarChart: {
+      modulePath: "./src/manifests/charts/RadialbarChart/RadialbarChart.tsx",
+      exportedVarName: "RadialbarChart",
+    },
+    GanttChart: {
+      modulePath: "./src/manifests/charts/GranttChart/GanttChart.tsx",
+      exportedVarName: "GanttChart",
+    },
+    TreemapChart: {
+      modulePath: "./src/manifests/charts/TreemapChart/TreemapChart.tsx",
+      exportedVarName: "TreemapChart",
+    },
     Checkbox: {
       modulePath: "./src/manifests/Checkbox/Checkbox.tsx",
       exportedVarName: "Checkbox",
@@ -108,6 +136,34 @@ module.exports = {
     Table: {
       modulePath: "./src/manifests/Table/Table.tsx",
       exportedVarName: "DataTable",
+    },
+    NewButton: {
+      modulePath: "./src/manifests/NewButton/NewButton.tsx",
+      exportedVarName: "NewButton",
+    },
+    Modal: {
+      modulePath: "./src/manifests/Modal/Modal.tsx",
+      exportedVarName: "Modal",
+    },
+    Form: {
+      modulePath: "./src/manifests/Form/Form.tsx",
+      exportedVarName: "Form",
+    },
+    Testimonial: {
+      modulePath: "./src/manifests/Testimonial/Testimonial.tsx",
+      exportedVarName: "Testimonial",
+    },
+    UnorderedList: {
+      modulePath: "./src/manifests/UnorderedList/UnorderedList.tsx",
+      exportedVarName: "UnorderedList",
+    },
+    Overlay: {
+      modulePath: "./src/manifests/Overlay/Overlay.tsx",
+      exportedVarName: "Overlay",
+    },
+    Cascader: {
+      modulePath: "./src/manifests/Cascader/Cascader.tsx",
+      exportedVarName: "Cascader",
     },
   },
 };

@@ -24,18 +24,11 @@ export const DataTable = forwardRef<
       selection?: GridRowId[];
     };
     onSelectionChange?: (selection: GridRowId[]) => void;
+    className?: string;
   }
 >((props, ref) => {
   return (
-    <div
-      ref={ref}
-      style={{
-        ...props.styles,
-        height: props.custom.autoHeight
-          ? undefined
-          : props.styles.height || "400px",
-      }}
-    >
+    <div className={props.className} ref={ref} style={props.styles}>
       <DataGrid
         autoHeight={props.custom.autoHeight}
         rowHeight={props.custom.rowHeight || 20}
@@ -106,13 +99,13 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    rows: "array",
-    cols: "array",
-    checkboxSelection: "boolean",
-    autoHeight: "boolean",
-    numRows: "number",
-    rowHeight: "number",
-    selection: "array",
+    rows: { type: "array" },
+    cols: { type: "array" },
+    checkboxSelection: { type: "boolean" },
+    autoHeight: { type: "boolean" },
+    numRows: { type: "number" },
+    rowHeight: { type: "number" },
+    selection: { type: "array" },
   },
 };
 
@@ -127,7 +120,9 @@ const compManifest: ReactComponentManifestSchema = {
     attachProps: {
       styles: {
         treeId: CSSTreeId,
-        initialValue: {},
+        initialValue: {
+          height: "400px",
+        },
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
       },

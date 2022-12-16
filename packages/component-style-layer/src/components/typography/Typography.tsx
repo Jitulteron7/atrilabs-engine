@@ -31,6 +31,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   drop: {
     display: "flex",
     alignItems: "baseline",
+    cursor: "pointer",
   },
   header: {
     ...h5Heading,
@@ -324,7 +325,6 @@ export const Typography: React.FC<CssProprtyComponentType> = (props) => {
           </div>
         </PropertyRender>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <span style={styles.optionName}>Color</span>
           <ColorComponent
             name="Color"
             styleItem="color"

@@ -1,20 +1,15 @@
 import { gray300, gray800, h1Heading } from "@atrilabs/design-system";
 import React, { useMemo } from "react";
 import { TabBodyProps } from "./types";
-import { Text } from "./components/text/Text";
-import { StaticAsset } from "./components/static-asset/StaticAsset";
-import { Boolean } from "./components/boolean/Boolean";
-import { LargeText } from "./components/large-text/LargeText";
-import { ListField } from "./components/list/ListField";
-import { Number } from "./components/number/Number";
-import { BooleanList } from "./components/boolean-list/BooleanList";
-import { NumberList } from "./components/number-list/NumberList";
-import { StaticAssetList } from "./components/static-asset-list/StaticAssetList";
-import { Color } from "./components/color/Color";
-import { InternalLink } from "./components/internal-link/InternalLink";
+import {
+  ArrayTypedMapCustomProp,
+  TypedMapCustomProp,
+} from "@atrilabs/app-design-forest/lib/customPropsTree";
+import { CommonPropTypeContainer } from "./components/commons/CommonPropTypeContainer";
 import { usePageRoutes } from "./hooks/usePageRoutes";
-import { ComponentSelector } from "./components/component-selector/ComponentSelector";
-import { ExternalLink } from "./components/external-link/ExternalLink";
+import { TypedMap } from "./components/typed-map/TypedMap";
+import { MapContainer } from "./components/commons/MapContainer";
+import { TypedMapList } from "./components/typed-map-list/TypedMapList";
 
 const styles: { [key: string]: React.CSSProperties } = {
   // top level container
@@ -23,6 +18,9 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     padding: "1rem",
     rowGap: "0.5rem",
+    overflow: "auto",
+    height: "100%",
+    boxSizing: "border-box",
   },
 
   // alias container
@@ -46,125 +44,61 @@ export const TabBody: React.FC<TabBodyProps> = (props) => {
   return (
     <div style={styles.container}>
       {propNames.map((propName) => {
-        const propType = props.treeOptions.dataTypes[propName];
-        if (propType === "text")
+        const propType = props.treeOptions.dataTypes[propName].type;
+        if (propType === "map" || propType === "array_map") {
           return (
-            <Text
+            <MapContainer
               {...props}
+              selector={[propName]}
+              propType={propType}
               propName={propName}
               key={propName}
               routes={routes}
             />
           );
-        if (propType === "static_asset")
+        }
+        if (propType === "typed_map") {
+          const typedMapCustomProps = props.treeOptions.dataTypes[
+            propName
+          ] as TypedMapCustomProp;
+          const attributes = typedMapCustomProps.attributes;
           return (
-            <StaticAsset
+            <TypedMap
               {...props}
+              selector={[propName]}
+              attributes={attributes}
               propName={propName}
               key={propName}
               routes={routes}
             />
           );
-        if (propType === "boolean")
+        }
+        if (propType === "array_typed_map") {
+          const typedMapCustomProps = props.treeOptions.dataTypes[
+            propName
+          ] as ArrayTypedMapCustomProp;
+          const attributes = typedMapCustomProps.attributes;
           return (
-            <Boolean
+            <TypedMapList
               {...props}
+              selector={[propName]}
+              attributes={attributes}
               propName={propName}
               key={propName}
               routes={routes}
             />
           );
-        if (propType === "large_text")
-          return (
-            <LargeText
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "array")
-          return (
-            <ListField
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "number")
-          return (
-            <Number
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "array_boolean")
-          return (
-            <BooleanList
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "array_number")
-          return (
-            <NumberList
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "array_static_asset")
-          return (
-            <StaticAssetList
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "color")
-          return (
-            <Color
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "internal_link")
-          return (
-            <InternalLink
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "component_selector")
-          return (
-            <ComponentSelector
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        if (propType === "external_link")
-          return (
-            <ExternalLink
-              {...props}
-              propName={propName}
-              key={propName}
-              routes={routes}
-            />
-          );
-        return <React.Fragment key={propName}></React.Fragment>;
+        }
+        return (
+          <CommonPropTypeContainer
+            {...props}
+            selector={[propName]}
+            propType={propType}
+            propName={propName}
+            key={propName}
+            routes={routes}
+          />
+        );
       })}
     </div>
   );

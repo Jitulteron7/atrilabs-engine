@@ -15,6 +15,7 @@ export const Radio = forwardRef<
     styles: React.CSSProperties;
     custom: { name: string; label: string; checked: boolean; radius?: string };
     onChange: (checked: boolean) => void;
+    className?: string;
   }
 >((props, ref) => {
   const onChangeCb: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -24,7 +25,7 @@ export const Radio = forwardRef<
     [props]
   );
   return (
-    <div style={props.styles} ref={ref}>
+    <div style={props.styles} ref={ref} className={props.className}>
       <input
         type="radio"
         onChange={onChangeCb}
@@ -33,8 +34,8 @@ export const Radio = forwardRef<
         checked={props.custom.checked}
         style={{
           ...props.styles,
-          height: props.custom.radius || props.styles.height,
-          width: props.custom.radius || props.styles.width,
+          height: props.custom.radius,
+          width: props.custom.radius,
         }}
       />
       {props.custom.label ? <label>{props.custom.label}</label> : null}
@@ -57,9 +58,10 @@ const cssTreeOptions: CSSTreeOptions = {
 
 const customTreeOptions: CustomPropsTreeOptions = {
   dataTypes: {
-    name: "text",
-    label: "text",
-    checked: "boolean",
+    name: { type: "text" },
+    label: { type: "text" },
+    checked: { type: "boolean" },
+    radius: { type: "number" },
   },
 };
 
@@ -77,6 +79,7 @@ const compManifest: ReactComponentManifestSchema = {
           cursor: "pointer",
           display: "inline-flex",
           columnGap: "10px",
+          alignItems: "center",
         },
         treeOptions: cssTreeOptions,
         canvasOptions: { groupByBreakpoint: true },
